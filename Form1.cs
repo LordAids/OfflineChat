@@ -17,6 +17,7 @@ namespace OfflineChat
         public Form1()
         {
             InitializeComponent();
+            
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -27,20 +28,45 @@ namespace OfflineChat
             var redis = ConnectionMultiplexer.Connect(option);
             var db = redis.GetDatabase(1);
 
-            const string Key = "Chat1";
-            db.StringSet(Key, "Чат начался!");
-
-            chatWindow.Text = db.StringGet(Key);
-
+            const string Key = "Chat:list";
+            db.StringSet(Key, "====ЧАТ НАЧАЛСЯ=====");
+            chatWindow.Text +=  db.StringGet(Key);
+            
+            timer1.Interval = 1000;
+            timer1.Start();
             /*db.StringSet(Key, "Znachenie");
 
             var result = db.StringGet(Key);*/
-
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            var option = new ConfigurationOptions();
+            option.EndPoints.Add("localhost", 6379);
 
+            var redis = ConnectionMultiplexer.Connect(option);
+            var db = redis.GetDatabase(1);
+            string Key = "Chat:list";
+            string message = DateTime.Now.ToString() + " : " + userNickname.Text + " : " + messageBox.Text;
+            db.StringSet(Key, message);
+            chatWindow.Text += "\n" + db.StringGet(Key);
+            
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+
+            var option = new ConfigurationOptions();
+            option.EndPoints.Add("localhost", 6379);
+
+            var redis = ConnectionMultiplexer.Connect(option);
+            var db = redis.GetDatabase(1);
+            string Key = "Chat:list";
+            if (!chatWindow.Text.Contains(db.StringGet(Key)))
+                {
+                    chatWindow.Text += "\n" + db.StringGet(Key);
+                }
+            
         }
     }
 }
