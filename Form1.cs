@@ -32,7 +32,7 @@ namespace OfflineChat
             db.StringSet(Key, "====ЧАТ НАЧАЛСЯ=====");
             chatWindow.Text +=  db.StringGet(Key);
             
-            timer1.Interval = 1000;
+            timer1.Interval = 10;
             timer1.Start();
             /*db.StringSet(Key, "Znachenie");
 
