@@ -34,9 +34,6 @@ namespace OfflineChat
             
             timer1.Interval = 10;
             timer1.Start();
-            /*db.StringSet(Key, "Znachenie");
-
-            var result = db.StringGet(Key);*/
         }
 
         private void button1_Click(object sender, EventArgs e)
